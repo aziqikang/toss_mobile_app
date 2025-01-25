@@ -1,20 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'src/screens/camera_screen.dart';
 
-import 'src/app.dart';
-import 'src/settings/settings_controller.dart';
-import 'src/settings/settings_service.dart';
+late List<CameraDescription> cameras;
 
-void main() async {
-  // Set up the SettingsController, which will glue user settings to multiple
-  // Flutter Widgets.
-  final settingsController = SettingsController(SettingsService());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  // Load the user's preferred theme while the splash screen is displayed.
-  // This prevents a sudden theme change when the app is first displayed.
-  await settingsController.loadSettings();
+  try {
+    cameras = await availableCameras();
+  } on CameraException catch (e) {
+    // Handle camera initialization errors here
+    debugPrint('Error initializing cameras: $e');
+  }
 
-  // Run the app and pass in the SettingsController. The app listens to the
-  // SettingsController for changes, then passes it further down to the
-  // SettingsView.
-  runApp(MyApp(settingsController: settingsController));
+  runApp(const CameraApp());
+}
+
+/// CameraApp is the Main Application.
+class CameraApp extends StatelessWidget {
+  /// Default Constructor
+  const CameraApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Camera App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: CameraScreen(cameras: cameras),
+    );
+  }
 }
