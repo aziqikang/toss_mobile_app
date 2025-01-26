@@ -1,6 +1,6 @@
-# Toss Mobile
+# Toss Mobile 🗑️ 💚
 
-## Getting Started
+## Getting Started 🐣
 
 Follow these steps to set up and run the `toss_mobile_app` project.
 
@@ -9,7 +9,7 @@ Follow these steps to set up and run the `toss_mobile_app` project.
 - Python 3.7+
 - Git
 
-### Setup & Run
+### Setup & Run 🏃🏃💨
 Clone the repository and run the following for setup:
 ```bash
 git clone https://github.com/aziqikang/toss_mobile_app.git
@@ -21,7 +21,9 @@ To run the app on an emulator or device:
 ```
 make run
 ```
+
 ----
+
 
 ## Inspiration 🌱
 Recycling is tough. Despite throwing things away all the time, every day, we've all stalled extra moments between a trash can and its neighboring recycling bin, because where the hell do you put your empty shipping packages?? And then there are batteries, paints and harmful waste, glass bottles, and... oh, compost. I guess that's waste too.
