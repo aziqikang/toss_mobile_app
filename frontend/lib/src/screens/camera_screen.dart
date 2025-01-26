@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:geolocator/geolocator.dart'; // Import for geolocation
+import 'package:toss_mobile_app/src/screens/result_screen.dart';
 import 'package:toss_mobile_app/src/services/openai_service.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -41,46 +42,43 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   /// Captures a photo, gets user location, and sends both to the backend
-  Future<void> _takePicture() async {
-    try {
-      // Ensure the camera is initialized
-      await _initializeControllerFuture;
+Future<void> _takePicture() async {
+  try {
+    // Ensure the camera is initialized
+    await _initializeControllerFuture;
 
-      // Capture the photo
-      final XFile image = await _controller.takePicture();
+    // Attempt to take a picture and get the file `image`
+    final XFile image = await _controller.takePicture();
 
-      // If the photo was successfully taken
-      if (!mounted) return;
+    // If the picture was taken, send it to the backend
+    if (!mounted) return;
 
-      // Get user location
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+    // Get user location
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
 
-      // Debugging: print the location
-      print('User location: ${position.latitude}, ${position.longitude}');
+    // Send the image to the backend and parse the result
+    Map<String, dynamic> backendResponse = await OpenAIService().sendPhoto(File(image.path), position);
 
-      // Send the image and location to the backend
-      final backendResponse = await OpenAIService().sendPhoto(
-        File(image.path),
-        position,
-      );
+    // Print the response in the console (for debugging purposes)
+    print('Backend Response: $backendResponse');
 
-      // Debugging: print the backend response
-      print('Backend Response: $backendResponse');
-
-      // Show a success message or navigate to another screen here, if needed
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Photo analyzed successfully!')),
-      );
-    } catch (e) {
-      // Handle errors
-      print('Error in _takePicture: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
+    // Navigate to the ResultScreen with the backendResponse
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ResultScreen(resultData: backendResponse),
+      ),
+    );
+  } catch (e) {
+    // Handle errors
+    print('Error in _takePicture: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
