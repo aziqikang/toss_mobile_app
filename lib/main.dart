@@ -1,6 +1,6 @@
+import 'src/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'src/screens/camera_screen.dart';
 
 late List<CameraDescription> cameras;
 
@@ -14,13 +14,13 @@ Future<void> main() async {
     debugPrint('Error initializing cameras: $e');
   }
 
-  runApp(const CameraApp());
+  runApp(const TossApp());
 }
 
-/// CameraApp is the Main Application.
-class CameraApp extends StatelessWidget {
+/// TossApp is the Main Application.
+class TossApp extends StatelessWidget {
   /// Default Constructor
-  const CameraApp({super.key});
+  const TossApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class CameraApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CameraScreen(cameras: cameras),
+      home: HomeScreen(cameras: cameras),
     );
   }
 }

@@ -2,19 +2,16 @@
 
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 
-/// CameraScreen is responsible for displaying the camera preview and handling camera functionalities.
 class CameraScreen extends StatefulWidget {
-  /// List of available cameras.
   final List<CameraDescription> cameras;
 
-  /// Constructor accepting the list of cameras.
   const CameraScreen({Key? key, required this.cameras}) : super(key: key);
 
   @override
-  State<CameraScreen> createState() => _CameraScreenState();
+  _CameraScreenState createState() => _CameraScreenState();
 }
 
 class _CameraScreenState extends State<CameraScreen> {
@@ -26,57 +23,63 @@ class _CameraScreenState extends State<CameraScreen> {
     super.initState();
     if (widget.cameras.isNotEmpty) {
       _controller = CameraController(
-        widget.cameras[0],
-        ResolutionPreset.max,
+        widget.cameras[0], // Use the first available camera
+        ResolutionPreset.high,
       );
 
-      _initializeControllerFuture = _controller.initialize().catchError((e) {
-        if (e is CameraException) {
-          switch (e.code) {
-            case 'CameraAccessDenied':
-              // Handle access errors here.
-              debugPrint('User denied camera access.');
-              break;
-            default:
-              // Handle other errors here.
-              debugPrint('Error initializing camera: ${e.description}');
-              break;
-          }
-        }
-      });
+      _initializeControllerFuture = _controller.initialize();
     } else {
-      debugPrint('No cameras available.');
+      print('No cameras available');
     }
   }
 
   @override
   void dispose() {
-    if (widget.cameras.isNotEmpty) {
-      _controller.dispose();
-    }
+    _controller.dispose();
     super.dispose();
+  }
+
+  /// Method to capture a photo
+  Future<void> _takePicture() async {
+    try {
+      // Ensure the camera is initialized
+      await _initializeControllerFuture;
+
+      // Attempt to take a picture and get the file `image`
+      final XFile image = await _controller.takePicture();
+
+      // If the picture was taken, navigate to DisplayPictureScreen to show the image
+      if (!mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DisplayPictureScreen(imagePath: image.path),
+        ),
+      );
+    } catch (e) {
+      // If an error occurs, log the error to the console
+      print('Error taking picture: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.cameras.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Camera')),
+        appBar: AppBar(title: const Text('Camera Screen')),
         body: const Center(child: Text('No camera available')),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Camera Preview')),
-      // Wait until the controller is initialized before displaying the preview
+      appBar: AppBar(title: const Text('Camera Screen')),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            // If the Future is complete, display the preview
+            // If the Future is complete, display the camera preview
             return CameraPreview(_controller);
           } else if (snapshot.hasError) {
-            // If there's an error during initialization
+            // If there's an error during initialization, display it
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             // Otherwise, display a loading indicator
@@ -85,28 +88,10 @@ class _CameraScreenState extends State<CameraScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          try {
-            // Ensure that the camera is initialized
-            await _initializeControllerFuture;
-
-            // Attempt to take a picture and get the file `image`
-            final image = await _controller.takePicture();
-
-            // If the picture was taken, display it on a new screen
-            if (!mounted) return;
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(imagePath: image.path),
-              ),
-            );
-          } catch (e) {
-            // If an error occurs, log the error to the console
-            debugPrint('Error taking picture: $e');
-          }
-        },
+        onPressed: _takePicture, // Call the _takePicture method when pressed
         child: const Icon(Icons.camera_alt),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // Position the FAB at the center bottom
     );
   }
 }
@@ -123,7 +108,7 @@ class DisplayPictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Display Picture')),
-      body: Image.file(File(imagePath)),
+      body: Image.file(File(imagePath)), // Display the captured image
     );
   }
 }
