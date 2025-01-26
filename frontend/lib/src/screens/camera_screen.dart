@@ -1,16 +1,9 @@
-// lib/src/screens/camera_screen.dart
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-
+import 'package:geolocator/geolocator.dart'; // Import for geolocation
 import 'package:toss_mobile_app/src/services/openai_service.dart';
-// import 'package:toss_mobile_app/src/utils/environment.dart';
-
-
-final OpenAIService _openAIService = OpenAIService();
-
 
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -28,6 +21,7 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
+
     if (widget.cameras.isNotEmpty) {
       _controller = CameraController(
         widget.cameras[0], // Use the first available camera
@@ -46,37 +40,47 @@ class _CameraScreenState extends State<CameraScreen> {
     super.dispose();
   }
 
+  /// Captures a photo, gets user location, and sends both to the backend
   Future<void> _takePicture() async {
     try {
       // Ensure the camera is initialized
       await _initializeControllerFuture;
 
-      // Capture the image
+      // Capture the photo
       final XFile image = await _controller.takePicture();
 
-      // Convert XFile to File
-      File imageFile = File(image.path);
-
-      // Send the photo to OpenAI API
-      String description = await _openAIService.sendPhoto(imageFile);
-
-      // Log the description to the console
-      print('Photo Description: $description');
-
-      // Navigate to DisplayPictureScreen to show the image
+      // If the photo was successfully taken
       if (!mounted) return;
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => DisplayPictureScreen(imagePath: image.path),
-        ),
+
+      // Get user location
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      // Debugging: print the location
+      print('User location: ${position.latitude}, ${position.longitude}');
+
+      // Send the image and location to the backend
+      final backendResponse = await OpenAIService().sendPhoto(
+        File(image.path),
+        position,
+      );
+
+      // Debugging: print the backend response
+      print('Backend Response: $backendResponse');
+
+      // Show a success message or navigate to another screen here, if needed
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Photo analyzed successfully!')),
       );
     } catch (e) {
-      // Handle any errors during the picture taking or API call
+      // Handle errors
       print('Error in _takePicture: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -108,24 +112,7 @@ class _CameraScreenState extends State<CameraScreen> {
         onPressed: _takePicture, // Call the _takePicture method when pressed
         child: const Icon(Icons.camera_alt),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // Position the FAB at the center bottom
-    );
-  }
-}
-
-/// DisplayPictureScreen displays the taken picture.
-class DisplayPictureScreen extends StatelessWidget {
-  /// Path of the taken picture.
-  final String imagePath;
-
-  /// Constructor accepting the image path.
-  const DisplayPictureScreen({super.key, required this.imagePath});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Display Picture')),
-      body: Image.file(File(imagePath)), // Display the captured image
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

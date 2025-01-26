@@ -1,0 +1,164 @@
+{
+    "categories": {
+      "1": {
+        "name": "Plastics",
+        "subcategories": {
+          "1.1": {
+            "name": "PET 1",
+            "description": "Polyethylene Terephthalate (e.g., water bottles, soda bottles).",
+            "disposal_instruction": "Recycle in most curbside programs.",
+            "url": "https://example.com/recycling/pet1"
+          },
+          "1.2": {
+            "name": "HDPE 2",
+            "description": "High-Density Polyethylene (e.g., milk jugs, detergent bottles).",
+            "disposal_instruction": "Clean and recycle in plastic recycling bins.",
+            "url": "https://example.com/recycling/hdpe2"
+          },
+          "1.3": {
+            "name": "LDPE 4",
+            "description": "Low-Density Polyethylene (e.g., plastic bags, wraps).",
+            "disposal_instruction": "Recycle at grocery store collection points.",
+            "url": "https://example.com/recycling/ldpe4"
+          }
+        }
+      },
+      "2": {
+        "name": "Paper",
+        "subcategories": {
+          "2.1": {
+            "name": "Cardboard",
+            "description": "Corrugated cardboard boxes.",
+            "disposal_instruction": "Flatten and place in curbside recycling bins.",
+            "url": "https://example.com/recycling/cardboard"
+          },
+          "2.2": {
+            "name": "Newspaper",
+            "description": "Newspapers and newsprint.",
+            "disposal_instruction": "Recycle in paper bins.",
+            "url": "https://example.com/recycling/newspaper"
+          },
+          "2.3": {
+            "name": "Glossy Paper",
+            "description": "Magazines, brochures, or catalogues.",
+            "disposal_instruction": "Recycle with mixed paper.",
+            "url": "https://example.com/recycling/glossypaper"
+          }
+        }
+      },
+      "3": {
+        "name": "Glass",
+        "subcategories": {
+          "3.1": {
+            "name": "Clear Glass",
+            "description": "Clear glass bottles and jars.",
+            "disposal_instruction": "Rinse and recycle in glass bins.",
+            "url": "https://example.com/recycling/clearglass"
+          },
+          "3.2": {
+            "name": "Colored Glass",
+            "description": "Brown or green glass bottles and jars.",
+            "disposal_instruction": "Recycle in designated glass bins.",
+            "url": "https://example.com/recycling/coloredglass"
+          }
+        }
+      },
+      "4": {
+        "name": "Metal",
+        "subcategories": {
+          "4.1": {
+            "name": "Aluminum",
+            "description": "Aluminum cans (e.g., soda cans).",
+            "disposal_instruction": "Rinse and recycle in curbside bins.",
+            "url": "https://example.com/recycling/aluminum"
+          },
+          "4.2": {
+            "name": "Steel",
+            "description": "Steel cans (e.g., food cans).",
+            "disposal_instruction": "Rinse and recycle in metal bins.",
+            "url": "https://example.com/recycling/steel"
+          }
+        }
+      },
+      "5": {
+        "name": "Compostable",
+        "subcategories": {
+          "5.1": {
+            "name": "Food Waste",
+            "description": "Fruits, vegetables, and other compostable food scraps.",
+            "disposal_instruction": "Place in a compost bin.",
+            "url": "https://example.com/recycling/compost"
+          },
+          "5.2": {
+            "name": "Yard Waste",
+            "description": "Grass clippings, leaves, and small branches.",
+            "disposal_instruction": "Place in green waste bins or compost.",
+            "url": "https://example.com/recycling/yardwaste"
+          }
+        }
+      },
+      "6": {
+        "name": "Trash",
+        "subcategories": {
+          "6.1": {
+            "name": "Non-Recyclable Plastics",
+            "description": "Plastics not accepted for recycling (e.g., certain packaging).",
+            "disposal_instruction": "Dispose of in regular trash bins.",
+            "url": null
+          },
+          "6.2": {
+            "name": "Mixed Trash",
+            "description": "Non-compostable, non-recyclable waste.",
+            "disposal_instruction": "Dispose of in regular trash bins.",
+            "url": null
+          }
+        }
+      },
+      "7": {
+        "name": "Electronics",
+        "subcategories": {
+          "7.1": {
+            "name": "Small Electronics",
+            "description": "Phones, tablets, and small electronic devices.",
+            "disposal_instruction": "Drop off at e-waste collection points.",
+            "url": "https://example.com/recycling/electronics"
+          },
+          "7.2": {
+            "name": "Larger Electronics",
+            "description": "Laptops, TVs, and monitors.",
+            "disposal_instruction": "Recycle at designated e-waste centers.",
+            "url": "https://example.com/recycling/electronics"
+          }
+        }
+      },
+      "8": {
+        "name": "Hazardous",
+        "subcategories": {
+          "8.1": {
+            "name": "Batteries",
+            "description": "Household batteries (e.g., AA, AAA, lithium-ion).",
+            "disposal_instruction": "Dispose of at battery recycling points.",
+            "url": "https://example.com/recycling/batteries"
+          },
+          "8.2": {
+            "name": "Paint",
+            "description": "Leftover or unused paint.",
+            "disposal_instruction": "Take to a hazardous waste disposal site.",
+            "url": "https://example.com/recycling/paint"
+          }
+        }
+      },
+      "9": {
+        "name": "Uncertain",
+        "subcategories": {
+          "9.1": {
+            "name": "Unknown Material",
+            "description": "Items that cannot be classified automatically.",
+            "disposal_instruction": "Consult your local waste management authority.",
+            "url": "https://example.com/recycling/help"
+          }
+        }
+      }
+    }
+  }
+  
